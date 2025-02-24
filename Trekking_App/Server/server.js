@@ -4,6 +4,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import conntDB from './config/Mangodb.js';
 import userRoutes from './routes/userRoutes.js';
+import adminRouter from './routes/adminRoute.js';
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -14,6 +15,7 @@ app.use(cors());
 conntDB();
 
 app.use('/api/users', userRoutes);
+app.use('/api/admin', adminRouter); 
 
 app.get('/', (req, res) => {
     res.send('API is working!');
