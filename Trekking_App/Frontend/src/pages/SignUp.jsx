@@ -1,3 +1,5 @@
+
+
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -24,38 +26,31 @@ const Auth = () => {
         });
     };
 
-    const validateSignUp = () => {
+    const validateForm = () => {
         const newErrors = {};
-        if (!formData.username) newErrors.username = "Username is required";
+
+        if (isSignUp && !formData.username) {
+            newErrors.username = "Username is required";
+        }
+
         if (!formData.email) {
             newErrors.email = "Email is required";
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
             newErrors.email = "Email is invalid";
         }
+
         if (!formData.password) {
             newErrors.password = "Password is required";
         } else if (formData.password.length < 6) {
             newErrors.password = "Password must be at least 6 characters long";
         }
-        if (!formData.confirmPassword) {
-            newErrors.confirmPassword = "Confirm Password is required";
-        } else if (formData.password !== formData.confirmPassword) {
-            newErrors.confirmPassword = "Passwords do not match";
-        }
 
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const validateLogin = () => {
-        const newErrors = {};
-        if (!formData.email) {
-            newErrors.email = "Email is required";
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = "Email is invalid";
-        }
-        if (!formData.password) {
-            newErrors.password = "Password is required";
+        if (isSignUp) {
+            if (!formData.confirmPassword) {
+                newErrors.confirmPassword = "Confirm Password is required";
+            } else if (formData.password !== formData.confirmPassword) {
+                newErrors.confirmPassword = "Passwords do not match";
+            }
         }
 
         setErrors(newErrors);
@@ -63,36 +58,38 @@ const Auth = () => {
     };
 
     const handleSubmit = async (e) => {
-      e.preventDefault();
-      const isValid = isSignUp ? validateSignUp() : validateLogin();
-      if (!isValid) return;
-  
-      setLoading(true);
-      const endpoint = isSignUp ? "/api/users/register" : "/api/users/login";
-      const payload = isSignUp
-          ? { name: formData.username, email: formData.email, password: formData.password }
-          : { email: formData.email, password: formData.password };
-  
-      try {
-          const { data } = await axios.post(`${BACKEND_URL}${endpoint}`, payload);
-          console.log("Response:", data);
-          setLoading(false);
-          navigate("/"); 
-      } catch (error) {
-          console.error("Error:", error.response?.data || error.message);
-          setErrors({ general: error.response?.data?.message || "An error occurred" });
-          setLoading(false);
-      }
-  };
-  
+        e.preventDefault();
+
+        if (!validateForm()) return;
+
+        setLoading(true);
+
+        const endpoint = isSignUp ? "/api/users/register" : "/api/users/login";
+        const payload = isSignUp
+            ? { name: formData.username, email: formData.email, password: formData.password }
+            : { email: formData.email, password: formData.password };
+
+        try {
+            const { data } = await axios.post(`${BACKEND_URL}${endpoint}`, payload);
+            console.log("Response:", data);
+            setLoading(false);
+            navigate("/");
+        } catch (error) {
+            console.error("Error:", error.response?.data || error.message);
+            setErrors({ general: error.response?.data?.message || "An error occurred" });
+            setLoading(false);
+        }
+    };
 
     return (
-        <div className="max-w-md mx-auto p-4">
+        <div className="max-w-md mx-auto p-20">
             <h2 className="text-3xl font-bold text-center mb-6">
                 {isSignUp ? "Sign Up" : "Login"}
             </h2>
 
-            {errors.general && <p className="text-red-600 text-sm">{errors.general}</p>}
+            {errors.general && (
+                <p className="text-red-600 text-sm mb-4">{errors.general}</p>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 {isSignUp && (
@@ -108,7 +105,9 @@ const Auth = () => {
                             onChange={handleChange}
                             className="w-full p-2 border rounded-md"
                         />
-                        {errors.username && <p className="text-red-600 text-sm">{errors.username}</p>}
+                        {errors.username && (
+                            <p className="text-red-600 text-sm">{errors.username}</p>
+                        )}
                     </div>
                 )}
 
@@ -124,7 +123,9 @@ const Auth = () => {
                         onChange={handleChange}
                         className="w-full p-2 border rounded-md"
                     />
-                    {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
+                    {errors.email && (
+                        <p className="text-red-600 text-sm">{errors.email}</p>
+                    )}
                 </div>
 
                 <div>
@@ -139,7 +140,9 @@ const Auth = () => {
                         onChange={handleChange}
                         className="w-full p-2 border rounded-md"
                     />
-                    {errors.password && <p className="text-red-600 text-sm">{errors.password}</p>}
+                    {errors.password && (
+                        <p className="text-red-600 text-sm">{errors.password}</p>
+                    )}
                 </div>
 
                 {isSignUp && (
@@ -155,7 +158,9 @@ const Auth = () => {
                             onChange={handleChange}
                             className="w-full p-2 border rounded-md"
                         />
-                        {errors.confirmPassword && <p className="text-red-600 text-sm">{errors.confirmPassword}</p>}
+                        {errors.confirmPassword && (
+                            <p className="text-red-600 text-sm">{errors.confirmPassword}</p>
+                        )}
                     </div>
                 )}
 

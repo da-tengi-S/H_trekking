@@ -1,7 +1,7 @@
 
+
 import React, { useState } from "react";
 import { HashLink as Link } from "react-router-hash-link";
-
 
 const NavBar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -22,9 +22,8 @@ const NavBar = () => {
       className="group z-20 fixed w-full h-16 bg-slate-800 text-white bg-opacity-80 font-semibold uppercase"
     >
       <div className="flex h-full items-center justify-between p-8">
-        
         <Link
-          to="#cover"
+          to="/#cover"
           smooth
           onClick={closeMobileMenu}
           className="text-4xl flex-1 font-archivo cursor-pointer"
@@ -39,7 +38,7 @@ const NavBar = () => {
           <li>
             <Link
               className="hover:text-brand transition-colors"
-              to="#cover"
+              to="/#cover"
               smooth
               onClick={closeMobileMenu}
             >
@@ -49,7 +48,7 @@ const NavBar = () => {
           <li>
             <Link
               className="hover:text-brand transition-colors"
-              to="#activities"
+              to="/#activities"
               smooth
               onClick={closeMobileMenu}
             >
@@ -59,7 +58,7 @@ const NavBar = () => {
           <li>
             <Link
               className="hover:text-brand transition-colors"
-              to="#founders"
+              to="/#founders"
               smooth
               onClick={closeMobileMenu}
             >
@@ -69,7 +68,7 @@ const NavBar = () => {
           <li>
             <Link
               className="hover:text-brand transition-colors"
-              to="#footer"
+              to="/#footer"
               smooth
               onClick={closeMobileMenu}
             >
